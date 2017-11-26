@@ -9,11 +9,8 @@ package formularios;
 
 
 import clases.Celda;
-import java.util.Date;
+import clases.Cromosoma;
 import javax.swing.ImageIcon;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -21,7 +18,9 @@ public class CuadradoMagico extends javax.swing.JFrame {
     public static Celda celdas[][];
     private int dimension;
     private int generaciones;
-    private final int maxGeneraciones=1000;
+    private final int maxGeneraciones=10000;
+    private int mejorfitness;
+    private int mejorcromosoma[][];
     
     
     /*Todo el funcionamiento se realiza mediante el actionPerformed
@@ -52,8 +51,9 @@ public class CuadradoMagico extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jfitness = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         Dimension = new javax.swing.JSpinner();
         Generaciones = new javax.swing.JTextField();
         Regresar = new javax.swing.JButton();
@@ -73,17 +73,22 @@ public class CuadradoMagico extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(230, 110, 130, 30);
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Generaciones:");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(380, 150, 101, 30);
+        jfitness.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jfitness.setForeground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(jfitness);
+        jfitness.setBounds(210, 440, 220, 30);
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Dimensión (n) :");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(10, 150, 112, 30);
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Generaciones:");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(380, 150, 101, 30);
 
         Dimension.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         Dimension.setModel(new javax.swing.SpinnerNumberModel(3, 3, 20, 1));
@@ -159,27 +164,35 @@ public class CuadradoMagico extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(this,"Ingrese un número de generaciones menor a: "+maxGeneraciones,"Error Generaciones",ERROR_MESSAGE);
            return;
        }
-       
-       
+       //Creando los cromosomas deacuerdo a las generaciones
+        Cromosoma calculo=new Cromosoma(dimension,generaciones);
+        
+        //Obteniendo al mejor cromosoma
+        mejorfitness=calculo.getMejorfitness();
+        mejorcromosoma=calculo.getMejorcromosoma();
        
        //Dibujamos el tablero en el JPanel1
        this.jPanel1.setLayout(new java.awt.GridLayout(dimension,dimension));
        celdas = new Celda[dimension][dimension]; //Matriz de celdas
            for(int i = 0; i < dimension; i++){
                 for(int j = 0; j < dimension; j++){
-                    celdas[i][j]=new Celda(i,j);
-                    celdas[i][j].setTipo(3);
+                    celdas[i][j]=new Celda();
                     celdas[i][j].setVisible(true);
-                    celdas[i][j].setText("H");
+                    celdas[i][j].setText(""+mejorcromosoma[i][j]);
                     this.jPanel1.add(celdas[i][j]);
                 }
             }
+       
+       jfitness.setText("Fitness:"+mejorfitness);
         
-       
-       
+        
        this.paintAll(this.getGraphics());
     }//GEN-LAST:event_DibujarActionPerformed
 
+   
+    
+    
+    
     private void RegresarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_RegresarKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_RegresarKeyTyped
@@ -234,8 +247,9 @@ public class CuadradoMagico extends javax.swing.JFrame {
     private javax.swing.JButton Regresar;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jfitness;
     // End of variables declaration//GEN-END:variables
 }
