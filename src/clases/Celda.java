@@ -13,22 +13,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 
 public class Celda extends JButton{
-   private boolean visible;   //Variable para saber si esta 
-    private final int x;
-    private final int y;    
-    private int tipo;    /* Tipos de celda                        
-                                0 significa que hay obstaculo.
-                                1 significa que hay mineral.
-                                2 significa que es la nave.
-                                3 significa que es una celda disponible para moverse. */
-    public Celda(int x, int y) {
-        super();
-        this.x = x;
-        this.y = y;
-                             
-        
+   
+    public Celda() {
+        super();         
+    
         this.setMinimumSize(new Dimension(1,1));
-        this.setBackground(new  java.awt.Color(192,192,192));//192
+        //this.setBackground(new  java.awt.Color(192,192,192));//192
         this.setFont(new java.awt.Font("Tahoma",1,12));
         this.addActionListener(new ActionListener(){
 
@@ -39,14 +29,7 @@ public class Celda extends JButton{
         });
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getTipo() {
-        return tipo;
-    }
    public void celdaActionPerformed(ActionEvent evt){
-        System.out.println(tipo);
+     
    }
 }

@@ -9,19 +9,18 @@ package formularios;
 
 
 import clases.Celda;
-import java.util.Date;
+import clases.CromosomaS;
+import javafx.scene.paint.Color;
 import javax.swing.ImageIcon;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 public class Sudoku extends javax.swing.JFrame {
     public static Celda celdas[][];
-    private int dimension=9;
+    private final int dimension=9;
     private int generaciones;
-    private final int maxGeneraciones=1000;
+    private int mejorfitness;
+    private int mejorcromosoma[][];
     
     
     /*Todo el funcionamiento se realiza mediante el actionPerformed
@@ -51,6 +50,7 @@ public class Sudoku extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jfitness = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         Generaciones = new javax.swing.JTextField();
@@ -63,6 +63,12 @@ public class Sudoku extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(null);
+
+        jfitness.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jfitness.setForeground(new java.awt.Color(255, 255, 255));
+        jfitness.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(jfitness);
+        jfitness.setBounds(230, 440, 130, 30);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -140,13 +146,18 @@ public class Sudoku extends javax.swing.JFrame {
        //Capturamos dimension y Generaciones
        //Dimension=9;
        generaciones=Integer.parseInt(Generaciones.getText());
-       
        //Validando el numero de generaciones
-       if(generaciones>maxGeneraciones){
-           JOptionPane.showMessageDialog(this,"Ingrese un número de generaciones menor a: "+maxGeneraciones,"Error Generaciones",ERROR_MESSAGE);
+       if(generaciones<1){
+           JOptionPane.showMessageDialog(this,"Ingrese un número de generaciones menor a: 0","Error Generaciones",ERROR_MESSAGE);
            return;
        }
        
+       //Creando los cromosomas deacuerdo a las generaciones
+        CromosomaS calculo=new CromosomaS(dimension,generaciones);
+        
+        //Obteniendo al mejor cromosoma
+        mejorfitness=calculo.getMejorfitness();
+        mejorcromosoma=calculo.getMejorcromosoma();
        
        
        //Dibujamos el tablero en el JPanel1
@@ -154,19 +165,36 @@ public class Sudoku extends javax.swing.JFrame {
        celdas = new Celda[dimension][dimension]; //Matriz de celdas
            for(int i = 0; i < dimension; i++){
                 for(int j = 0; j < dimension; j++){
-                    celdas[i][j]=new Celda(i,j);
-                    celdas[i][j].setTipo(3);
+                    celdas[i][j]=new Celda();
+                    //Coloreando cuadros de 3x3
+                    if(i<3 && j<3)
+                        celdas[i][j].setBackground(java.awt.Color.yellow);
+                    if(i<3 && j>=3 && j<6)
+                        celdas[i][j].setBackground(java.awt.Color.GREEN);
+                    if(i<3 && j>=6 && j<9)
+                        celdas[i][j].setBackground(java.awt.Color.BLUE);
+                    if(i>=3 && i<6 && j<3)
+                        celdas[i][j].setBackground(java.awt.Color.LIGHT_GRAY);
+                    if(i>=3 && i<6 && j>=3 && j<6)
+                        celdas[i][j].setBackground(java.awt.Color.CYAN);
+                    if(i>=3 && i<6 && j>=6 && j<9)
+                        celdas[i][j].setBackground(java.awt.Color.RED);
+                    if(i>=6 && i<9 && j<3)
+                        celdas[i][j].setBackground(java.awt.Color.darkGray);
+                    if(i>=6 && i<9 && j>=3 && j<6)
+                        celdas[i][j].setBackground(java.awt.Color.PINK);
+                    if(i>=6 && i<9 && j>=6 && j<9)
+                        celdas[i][j].setBackground(java.awt.Color.GRAY);
+                    celdas[i][j].setText(""+mejorcromosoma[i][j]);
                     celdas[i][j].setVisible(true);
-                    celdas[i][j].setText("H");
                     this.jPanel1.add(celdas[i][j]);
                 }
             }
         
-       
-       
+       jfitness.setText("Fitness:"+mejorfitness);
        this.paintAll(this.getGraphics());
     }//GEN-LAST:event_DibujarActionPerformed
-
+    
     private void RegresarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_RegresarKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_RegresarKeyTyped
@@ -230,5 +258,6 @@ public class Sudoku extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jfitness;
     // End of variables declaration//GEN-END:variables
 }

@@ -18,7 +18,6 @@ public class CuadradoMagico extends javax.swing.JFrame {
     public static Celda celdas[][];
     private int dimension;
     private int generaciones;
-    private final int maxGeneraciones=10000;
     private int mejorfitness;
     private int mejorcromosoma[][];
     
@@ -51,6 +50,7 @@ public class CuadradoMagico extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jfitness1 = new javax.swing.JLabel();
         jfitness = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -73,10 +73,17 @@ public class CuadradoMagico extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(230, 110, 130, 30);
 
+        jfitness1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jfitness1.setForeground(new java.awt.Color(255, 255, 255));
+        jfitness1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(jfitness1);
+        jfitness1.setBounds(250, 460, 90, 30);
+
         jfitness.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jfitness.setForeground(new java.awt.Color(255, 255, 255));
+        jfitness.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         getContentPane().add(jfitness);
-        jfitness.setBounds(210, 440, 220, 30);
+        jfitness.setBounds(210, 440, 170, 30);
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -93,7 +100,7 @@ public class CuadradoMagico extends javax.swing.JFrame {
         Dimension.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         Dimension.setModel(new javax.swing.SpinnerNumberModel(3, 3, 20, 1));
         getContentPane().add(Dimension);
-        Dimension.setBounds(130, 150, 40, 30);
+        Dimension.setBounds(130, 150, 50, 30);
 
         Generaciones.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         Generaciones.setToolTipText("Generaciones");
@@ -160,10 +167,11 @@ public class CuadradoMagico extends javax.swing.JFrame {
        generaciones=Integer.parseInt(Generaciones.getText());
        
        //Validando el numero de generaciones
-       if(generaciones>maxGeneraciones){
-           JOptionPane.showMessageDialog(this,"Ingrese un número de generaciones menor a: "+maxGeneraciones,"Error Generaciones",ERROR_MESSAGE);
+       if(generaciones<1){
+           JOptionPane.showMessageDialog(this,"Ingrese un número de generaciones myor a: 0","Error Generaciones",ERROR_MESSAGE);
            return;
        }
+       generaciones*=10;
        //Creando los cromosomas deacuerdo a las generaciones
         Cromosoma calculo=new Cromosoma(dimension,generaciones);
         
@@ -184,7 +192,7 @@ public class CuadradoMagico extends javax.swing.JFrame {
             }
        
        jfitness.setText("Fitness:"+mejorfitness);
-        
+       jfitness1.setText("K="+dimension*((dimension*dimension)+1)/2);
         
        this.paintAll(this.getGraphics());
     }//GEN-LAST:event_DibujarActionPerformed
@@ -251,5 +259,6 @@ public class CuadradoMagico extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jfitness;
+    private javax.swing.JLabel jfitness1;
     // End of variables declaration//GEN-END:variables
 }

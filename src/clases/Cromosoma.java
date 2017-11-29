@@ -26,9 +26,7 @@ public class Cromosoma {
                     for (int l = 0; l <dimension ; l++) {
                         do {
                           numrandom=(int) (Math.random() * (dimension*dimension)) + 1;
-                            System.out.println(""+numrandom);
                         } while (Existe(c,dimension,numrandom));
-                        System.out.println("Guardo:"+numrandom);
                         c[j][l]=numrandom;
                     }
                 }
@@ -38,14 +36,21 @@ public class Cromosoma {
                 inicio=false;
             }
             else{//Sino evaluamos que el fitness Generado sea menor al que esta como menor
-                switch ((int) (Math.random() * (2)) + 1) {
+                switch ((int) (Math.random() * (4)) + 1) {
                     case 1://Modificamos la primer mitad del cromosoma
                             c=mejorcromosoma;
+                            for (int i = 0; i < dimension/2; i++) {
+                                 for (int j = 0; j < dimension; j++) {
+                                    c[i][j]=0;
+                                }
+                            }
+                            
+                            
                             for (int i = 0; i < dimension/2; i++) {
                                 for (int j = 0; j < dimension; j++) {
                                     do {
                                       numrandom=(int) (Math.random() * (dimension*dimension)) + 1;
-                                    } while (Existe(mejorcromosoma,dimension,numrandom));
+                                    } while (Existe(c,dimension,numrandom));
                                     c[i][j]=numrandom;
                                 }
                             }
@@ -58,6 +63,13 @@ public class Cromosoma {
                     case 2://Modificamos la segunda mitad del cromosoma
                             c=mejorcromosoma;
                             for (int i = dimension/2; i < dimension; i++) {
+                                for (int j = 0; j <dimension; j++) {
+                                    c[i][j]=0;
+                                }
+                            }
+                            
+                            
+                            for (int i = dimension/2; i < dimension; i++) {
                                 for (int j = 0; j < dimension; j++) {
                                     do {
                                       numrandom=(int) (Math.random() * (dimension*dimension)) + 1;
@@ -65,6 +77,55 @@ public class Cromosoma {
                                     c[i][j]=numrandom;
                                 }
                             }
+                            
+                            fitness=Fitness(c,dimension);
+                            if(fitness<mejorfitness){
+                                mejorcromosoma=c;
+                                mejorfitness=fitness;
+                            } 
+                        break;
+                        case 3://Modificamos la mitad inferior del cromosoma
+                            c=mejorcromosoma;
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = 0; j <dimension/2; j++) {
+                                    c[i][j]=0;
+                                }
+                            }
+                            
+                            
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = 0; j < dimension/2; j++) {
+                                    do {
+                                      numrandom=(int) (Math.random() * (dimension*dimension)) + 1;
+                                    } while (Existe(c,dimension,numrandom));
+                                    c[i][j]=numrandom;
+                                }
+                            }
+                            
+                            fitness=Fitness(c,dimension);
+                            if(fitness<mejorfitness){
+                                mejorcromosoma=c;
+                                mejorfitness=fitness;
+                            } 
+                        break;
+                        case 4://Modificamos la mitad superior del cromosoma
+                            c=mejorcromosoma;
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = dimension/2; j <dimension; j++) {
+                                    c[i][j]=0;
+                                }
+                            }
+                            
+                            
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = dimension/2; j < dimension; j++) {
+                                    do {
+                                      numrandom=(int) (Math.random() * (dimension*dimension)) + 1;
+                                    } while (Existe(c,dimension,numrandom));
+                                    c[i][j]=numrandom;
+                                }
+                            }
+                            
                             fitness=Fitness(c,dimension);
                             if(fitness<mejorfitness){
                                 mejorcromosoma=c;
@@ -109,6 +170,14 @@ public class Cromosoma {
                     }
                     fitnesstemp+=Math.abs(k-acumulador);
                 }
+//                for (int i = 0; i < d; i++) { //Sumando las diagonales
+//                    acumulador=0;
+//                    for (int j = 0; j < d; j++) {
+//                        if(i==j)
+//                          acumulador+=c[i][j];
+//                    }
+//                    fitnesstemp+=Math.abs(k-acumulador);
+//                }
                 return(fitnesstemp);
     }
 
